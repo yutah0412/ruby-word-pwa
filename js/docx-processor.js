@@ -120,17 +120,28 @@ window.DocxProcessor = (function() {
     if (rPr) outerR.appendChild(rPr.cloneNode(true));
 
     const ruby = doc.createElementNS(W_NS, 'w:ruby');
+    // baseSize は half-points 単位（24 = 12pt）
+    // baseSize が取れない場合は Word デフォルトの 10.5pt (sz=21)
     const baseSize = getFontSizeHalfPoints(rPr) || 21;
+
+    // ルビサイズ = 親文字の正確に半分（half-points単位で割る）
+    // 例: 24 (12pt) / 2 = 12 (6pt)
+    //     22 (11pt) / 2 = 11 (5.5pt) ← 小数ポイントOK
+    //     21 (10.5pt) / 2 = 10.5 → 切り下げて 10 (5pt)
+    // half-points 値は整数でなければならないので Math.floor を使用
+    // （Math.round だと 21/2=10.5 → 11 になり僅かに大きくなる）
+    const rubyHalfPoints = Math.floor(baseSize / 2);
 
     const rubyPr = doc.createElementNS(W_NS, 'w:rubyPr');
     const rubyAlign = doc.createElementNS(W_NS, 'w:rubyAlign');
     rubyAlign.setAttribute('w:val', 'distributeSpace');
     rubyPr.appendChild(rubyAlign);
     const hps = doc.createElementNS(W_NS, 'w:hps');
-    hps.setAttribute('w:val', String(Math.max(10, Math.round(baseSize / 2))));
+    hps.setAttribute('w:val', String(rubyHalfPoints));
     rubyPr.appendChild(hps);
     const hpsRaise = doc.createElementNS(W_NS, 'w:hpsRaise');
-    hpsRaise.setAttribute('w:val', String(Math.round(baseSize * 0.9)));
+    // hpsRaise（ルビを上に出す量）：親文字サイズに等しい（Wordの標準動作）
+    hpsRaise.setAttribute('w:val', String(baseSize));
     rubyPr.appendChild(hpsRaise);
     const hpsBaseText = doc.createElementNS(W_NS, 'w:hpsBaseText');
     hpsBaseText.setAttribute('w:val', String(baseSize));
@@ -142,7 +153,7 @@ window.DocxProcessor = (function() {
 
     const rt = doc.createElementNS(W_NS, 'w:rt');
     const rtR = doc.createElementNS(W_NS, 'w:r');
-    const rtRPr = buildRtRPr(doc, rPr, Math.max(10, Math.round(baseSize / 2)));
+    const rtRPr = buildRtRPr(doc, rPr, rubyHalfPoints);
     rtR.appendChild(rtRPr);
     const rtT = doc.createElementNS(W_NS, 'w:t');
     rtT.setAttribute('xml:space', 'preserve');
