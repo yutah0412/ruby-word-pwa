@@ -6,7 +6,7 @@ Wordファイル（.docx）の漢字にふりがなを自動で振るProgressive
 ## 🚀 使い方
 
 ### ブラウザで使う
-1. https://[YOUR-USERNAME].github.io/ruby-word-pwa/ にアクセス
+1. https://yutah0412.github.io/ruby-word-pwa/ にアクセス
 2. .docx ファイルをドラッグ&ドロップ
 3. 「ルビを振って保存」をクリック
 4. ダウンロードフォルダに結果が保存されます
