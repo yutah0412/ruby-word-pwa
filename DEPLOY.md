@@ -31,7 +31,7 @@ git commit -m "Initial PWA commit"
 
 # リモート追加（YOUR-USERNAME を自分のGitHubユーザー名に置き換え）
 git branch -M main
-git remote add origin https://github.com/YOUR-USERNAME/ruby-word-pwa.git
+git remote add origin https://github.com/yutah0412/ruby-word-pwa.git
 git push -u origin main
 ```
 
