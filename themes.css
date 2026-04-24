@@ -1,0 +1,299 @@
+/**
+ * Theme System
+ *
+ * Themes are applied via data-theme attribute on <html>:
+ *   data-theme="wafu"      — 和風モダン（default）
+ *   data-theme="minimal"   — ミニマル
+ *   data-theme="pop"       — バイカラー・Pop
+ *
+ * Dark mode is applied via data-mode="dark" on <html>.
+ * Each theme has both light and dark variants.
+ */
+
+/* ==========================================
+   THEME: 和風モダン (Wafu / default)
+   朱色×墨色×生成り — 書院風
+   ========================================== */
+
+[data-theme="wafu"][data-mode="light"] {
+  --bg: #faf6ec;
+  --bg-elev: #ffffff;
+  --bg-subtle: #f3ede0;
+  --bg-inset: #f8f4e8;
+
+  --ink: #1a1712;
+  --ink-2: #4a4338;
+  --ink-3: #8a8070;
+  --ink-4: #b8ad98;
+
+  --line: #e8ddc6;
+  --line-strong: #d4c5a5;
+
+  --accent: #c8472c;        /* 朱 */
+  --accent-2: #a63a22;
+  --accent-soft: #fbe9e3;
+  --accent-glow: rgba(200, 71, 44, 0.15);
+
+  --ok: #2d7a4f;
+  --ok-soft: #e6f2ea;
+  --warn: #b87d0e;
+  --warn-soft: #fbf2dc;
+
+  --shadow-sm: 0 1px 2px rgba(80, 60, 30, 0.04), 0 1px 3px rgba(80, 60, 30, 0.06);
+  --shadow-md: 0 4px 12px rgba(80, 60, 30, 0.08), 0 2px 4px rgba(80, 60, 30, 0.04);
+  --shadow-lg: 0 12px 32px rgba(80, 60, 30, 0.12), 0 4px 8px rgba(80, 60, 30, 0.05);
+
+  --font-title: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Segoe UI", sans-serif;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-xs: 5px;
+
+  /* Decorative paper backdrop */
+  --bg-image:
+    radial-gradient(circle at 18% 8%, rgba(200, 71, 44, 0.04), transparent 45%),
+    radial-gradient(circle at 82% 90%, rgba(200, 71, 44, 0.03), transparent 45%);
+}
+
+[data-theme="wafu"][data-mode="dark"] {
+  --bg: #1a1714;
+  --bg-elev: #26211c;
+  --bg-subtle: #211c17;
+  --bg-inset: #1f1a15;
+
+  --ink: #ebe4d4;
+  --ink-2: #b8ad98;
+  --ink-3: #8a8070;
+  --ink-4: #5a5245;
+
+  --line: #35302a;
+  --line-strong: #4a4338;
+
+  --accent: #e8765a;        /* 朱（dark-adjusted） */
+  --accent-2: #d96348;
+  --accent-soft: #3a2a24;
+  --accent-glow: rgba(232, 118, 90, 0.2);
+
+  --ok: #5fb488;
+  --ok-soft: #1e3326;
+  --warn: #e0a64c;
+  --warn-soft: #35281a;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.4), 0 4px 8px rgba(0, 0, 0, 0.25);
+
+  --font-title: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Segoe UI", sans-serif;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-xs: 5px;
+
+  --bg-image:
+    radial-gradient(circle at 18% 8%, rgba(232, 118, 90, 0.05), transparent 45%),
+    radial-gradient(circle at 82% 90%, rgba(232, 118, 90, 0.03), transparent 45%);
+}
+
+/* ==========================================
+   THEME: ミニマル (Minimal)
+   黒×白×グレー — 線と余白
+   ========================================== */
+
+[data-theme="minimal"][data-mode="light"] {
+  --bg: #fafafa;
+  --bg-elev: #ffffff;
+  --bg-subtle: #f4f4f4;
+  --bg-inset: #f7f7f7;
+
+  --ink: #0a0a0a;
+  --ink-2: #404040;
+  --ink-3: #737373;
+  --ink-4: #a3a3a3;
+
+  --line: #e5e5e5;
+  --line-strong: #d4d4d4;
+
+  --accent: #0a0a0a;
+  --accent-2: #262626;
+  --accent-soft: #f0f0f0;
+  --accent-glow: rgba(0, 0, 0, 0.06);
+
+  --ok: #16a34a;
+  --ok-soft: #f0fdf4;
+  --warn: #ca8a04;
+  --warn-soft: #fefce8;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+  --font-title: -apple-system, "Inter", "Helvetica Neue", "Hiragino Sans", sans-serif;
+  --font-body: -apple-system, "Inter", "Helvetica Neue", "Hiragino Sans", sans-serif;
+
+  --radius: 6px;
+  --radius-sm: 4px;
+  --radius-xs: 3px;
+
+  --bg-image: none;
+}
+
+[data-theme="minimal"][data-mode="dark"] {
+  --bg: #0a0a0a;
+  --bg-elev: #171717;
+  --bg-subtle: #141414;
+  --bg-inset: #121212;
+
+  --ink: #fafafa;
+  --ink-2: #a3a3a3;
+  --ink-3: #737373;
+  --ink-4: #525252;
+
+  --line: #262626;
+  --line-strong: #404040;
+
+  --accent: #fafafa;
+  --accent-2: #e5e5e5;
+  --accent-soft: #262626;
+  --accent-glow: rgba(255, 255, 255, 0.08);
+
+  --ok: #4ade80;
+  --ok-soft: #14221a;
+  --warn: #facc15;
+  --warn-soft: #2a2410;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+
+  --font-title: -apple-system, "Inter", "Helvetica Neue", "Hiragino Sans", sans-serif;
+  --font-body: -apple-system, "Inter", "Helvetica Neue", "Hiragino Sans", sans-serif;
+
+  --radius: 6px;
+  --radius-sm: 4px;
+  --radius-xs: 3px;
+
+  --bg-image: none;
+}
+
+/* ==========================================
+   THEME: バイカラー・Pop
+   明るく楽しい色使い
+   ========================================== */
+
+[data-theme="pop"][data-mode="light"] {
+  --bg: #fffcf5;
+  --bg-elev: #ffffff;
+  --bg-subtle: #fff3e0;
+  --bg-inset: #fffaf0;
+
+  --ink: #1a1040;
+  --ink-2: #4a3f7c;
+  --ink-3: #8a82b0;
+  --ink-4: #beb8d4;
+
+  --line: #ead7f5;
+  --line-strong: #d4b8ea;
+
+  --accent: #6b4cf0;         /* 明るい紫 */
+  --accent-2: #5a3ee0;
+  --accent-soft: #ede6ff;
+  --accent-glow: rgba(107, 76, 240, 0.18);
+
+  --ok: #20c997;
+  --ok-soft: #e0f7ef;
+  --warn: #ff9500;
+  --warn-soft: #fff4e0;
+
+  --shadow-sm: 0 1px 3px rgba(107, 76, 240, 0.08);
+  --shadow-md: 0 6px 16px rgba(107, 76, 240, 0.12), 0 2px 4px rgba(107, 76, 240, 0.06);
+  --shadow-lg: 0 16px 40px rgba(107, 76, 240, 0.18), 0 4px 8px rgba(107, 76, 240, 0.08);
+
+  --font-title: "SF Pro Display", -apple-system, "Hiragino Sans", sans-serif;
+  --font-body: -apple-system, "SF Pro Text", "Hiragino Sans", sans-serif;
+
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+
+  --bg-image:
+    radial-gradient(circle at 15% 10%, rgba(107, 76, 240, 0.06), transparent 40%),
+    radial-gradient(circle at 85% 90%, rgba(255, 149, 0, 0.05), transparent 40%);
+}
+
+[data-theme="pop"][data-mode="dark"] {
+  --bg: #14102a;
+  --bg-elev: #1f1a3e;
+  --bg-subtle: #1a1535;
+  --bg-inset: #181330;
+
+  --ink: #f5f0ff;
+  --ink-2: #beb8d4;
+  --ink-3: #8a82b0;
+  --ink-4: #5a5280;
+
+  --line: #2e2650;
+  --line-strong: #3f3668;
+
+  --accent: #9b85ff;
+  --accent-2: #b29eff;
+  --accent-soft: #2a2350;
+  --accent-glow: rgba(155, 133, 255, 0.2);
+
+  --ok: #3ddcad;
+  --ok-soft: #133628;
+  --warn: #ffb547;
+  --warn-soft: #3a2a14;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
+
+  --font-title: "SF Pro Display", -apple-system, "Hiragino Sans", sans-serif;
+  --font-body: -apple-system, "SF Pro Text", "Hiragino Sans", sans-serif;
+
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+
+  --bg-image:
+    radial-gradient(circle at 15% 10%, rgba(155, 133, 255, 0.07), transparent 40%),
+    radial-gradient(circle at 85% 90%, rgba(255, 181, 71, 0.05), transparent 40%);
+}
+
+/* ==========================================
+   Theme-specific decorative elements
+   ========================================== */
+
+/* Minimal theme: sharper corners on some elements */
+[data-theme="minimal"] .brand-mark,
+[data-theme="minimal"] .chip {
+  border-radius: 2px !important;
+}
+[data-theme="minimal"] .btn-primary {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Pop theme: softer, playful styles */
+[data-theme="pop"] .brand-mark {
+  background: linear-gradient(135deg, var(--accent), #ff9500) !important;
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+[data-theme="pop"] .btn-primary {
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+[data-theme="pop"] .btn-primary:hover:not(:disabled) {
+  box-shadow: 0 6px 20px var(--accent-glow);
+}
+
+/* Wafu theme: decorative paper edge on header */
+[data-theme="wafu"] .brand-mark::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 1px solid rgba(200, 71, 44, 0.25);
+  border-radius: inherit;
+  pointer-events: none;
+}

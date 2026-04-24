@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- 背景：和紙風 -->
+  <rect width="512" height="512" rx="96" fill="#faf6ec"/>
+
+  <!-- 朱色の外枠 -->
+  <rect x="32" y="32" width="448" height="448" rx="80"
+        fill="none" stroke="#c8472c" stroke-width="8" opacity="0.25"/>
+
+  <!-- 印章風の背景 -->
+  <rect x="96" y="96" width="320" height="320" rx="24"
+        fill="#c8472c"/>
+
+  <!-- 内側ライン（印章の縁） -->
+  <rect x="112" y="112" width="288" height="288" rx="16"
+        fill="none" stroke="#faf6ec" stroke-width="4" opacity="0.4"/>
+
+  <!-- 「漢」の字 -->
+  <text x="256" y="340" text-anchor="middle"
+        font-family="'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif"
+        font-size="240" font-weight="500"
+        fill="#faf6ec">漢</text>
+
+  <!-- ふりがな「ふりがな」 -->
+  <text x="256" y="452" text-anchor="middle"
+        font-family="'Hiragino Sans', 'Yu Gothic', sans-serif"
+        font-size="42" font-weight="600"
+        fill="#1a1712" letter-spacing="4">ふりがな</text>
+</svg>

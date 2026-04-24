@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Maskable Icon 用 SVG
+  ====================
+  PWAの maskable アイコン仕様に従い、
+  「512x512キャンバス」に対して「中心80%（410x410）」以内に
+  デザインを収めている。
+
+  外周10%（=51.2px）は OS がマスクで削り取る可能性があるので、
+  削られても問題ない背景色で塗りつぶすだけ。
+
+  比較：
+  - icon.svg（通常）  → 印章風の赤い四角がキャンバス96〜416の範囲
+  - icon-maskable.svg → 赤い背景が全面、デザインは中心に縮小
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- 全面を朱色で塗る（縁が削られても違和感なし） -->
+  <rect width="512" height="512" fill="#c8472c"/>
+
+  <!-- セーフゾーン(中心80% = 410×410, offset 51〜461) 内にデザインを収める -->
+
+  <!-- 内側ライン（印章の縁、セーフゾーン内） -->
+  <rect x="80" y="80" width="352" height="352" rx="24"
+        fill="none" stroke="#faf6ec" stroke-width="4" opacity="0.35"/>
+
+  <!-- 「漢」の字（セーフゾーン内、中心に配置） -->
+  <text x="256" y="310" text-anchor="middle"
+        font-family="'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif"
+        font-size="210" font-weight="500"
+        fill="#faf6ec">漢</text>
+
+  <!-- 「ふりがな」（下部、セーフゾーン内） -->
+  <text x="256" y="400" text-anchor="middle"
+        font-family="'Hiragino Sans', 'Yu Gothic', sans-serif"
+        font-size="38" font-weight="600"
+        fill="#faf6ec" letter-spacing="3" opacity="0.95">ふりがな</text>
+</svg>

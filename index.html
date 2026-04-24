@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="wafu" data-mode="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Wordファイルの漢字にふりがなを振るPWAアプリ">
+<meta name="theme-color" content="#c8472c">
+<title>ルビ振りWord</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="themes.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <!-- ===== Header ===== -->
+    <header class="header">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">漢</div>
+        <div class="brand-text">
+          <h1>ルビ振り<span class="muted">Word</span></h1>
+          <p class="tagline">Wordファイルの漢字にふりがなを振ります</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="appearance" title="テーマ">
+          <button class="appearance-btn" data-theme-btn="wafu" title="和風モダン">
+            <span class="theme-swatch wafu"></span>
+          </button>
+          <button class="appearance-btn" data-theme-btn="minimal" title="ミニマル">
+            <span class="theme-swatch minimal"></span>
+          </button>
+          <button class="appearance-btn" data-theme-btn="pop" title="バイカラー・Pop">
+            <span class="theme-swatch pop"></span>
+          </button>
+        </div>
+        <div class="appearance" title="ライト/ダーク">
+          <button class="appearance-btn" data-mode-btn="light" title="ライト">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          </button>
+          <button class="appearance-btn" data-mode-btn="dark" title="ダーク">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+        </div>
+        <div class="status" id="status">
+          <span class="dot" id="statusDot"></span>
+          <span id="statusText">準備中…</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== Tab navigation ===== -->
+    <nav class="tabs">
+      <button class="tab active" data-tab="process">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        ルビ振り
+      </button>
+      <button class="tab" data-tab="history">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        履歴 <span class="tab-count" id="histCount">0</span>
+      </button>
+      <button class="tab" data-tab="exclusions">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+        除外リスト <span class="tab-count" id="exCount">0</span>
+      </button>
+      <button class="tab" data-tab="customdict">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        カスタム辞書 <span class="tab-count" id="cdCount">0</span>
+      </button>
+    </nav>
+
+    <!-- ===== TAB: Process ===== -->
+    <div class="tab-panel active" data-panel="process">
+
+    <!-- ===== Input section ===== -->
+    <section class="panel" id="panel-input">
+      <div class="panel-head">
+        <span class="panel-num">1</span>
+        <h2>ファイル / フォルダを選択</h2>
+      </div>
+
+      <div class="dropzone" id="dropzone">
+        <svg class="dz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
+          <path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/>
+          <path d="M12 11v6"/>
+          <path d="m9 14 3-3 3 3"/>
+        </svg>
+        <div class="dz-title">ここに .docx ファイルやフォルダをドロップ</div>
+        <div class="dz-actions">
+          <button class="btn-secondary" id="pickFilesBtn">ファイルを選択</button>
+          <button class="btn-secondary" id="pickFolderBtn">フォルダを選択</button>
+        </div>
+        <div class="dz-note">複数ファイル・フォルダごとの一括処理に対応</div>
+      </div>
+
+      <div class="file-list" id="fileList"></div>
+    </section>
+
+    <!-- ===== Options section ===== -->
+    <section class="panel" id="panel-options">
+      <div class="panel-head">
+        <span class="panel-num">2</span>
+        <h2>オプション</h2>
+      </div>
+
+      <div class="options">
+        <label class="opt">
+          <input type="checkbox" id="optHiragana" checked>
+          <span class="opt-label">ひらがなでルビを振る</span>
+          <span class="opt-hint">オフにするとカタカナ</span>
+        </label>
+        <label class="opt">
+          <input type="checkbox" id="optSkipKana">
+          <span class="opt-label">読みと同じ場合はルビを省略</span>
+          <span class="opt-hint">例：送り仮名のみの語など</span>
+        </label>
+        <label class="opt">
+          <input type="checkbox" id="optSkipExisting" checked>
+          <span class="opt-label">既存のルビはそのまま</span>
+          <span class="opt-hint">振り直さず保持</span>
+        </label>
+        <label class="opt">
+          <input type="checkbox" id="optRubiKatakana">
+          <span class="opt-label">カタカナにもルビを振る</span>
+          <span class="opt-hint">外来語など</span>
+        </label>
+      </div>
+
+      <div class="output-dir">
+        <label>
+          <span class="od-label">出力先フォルダ</span>
+          <div class="od-row">
+            <input type="text" id="outputDirInput" placeholder="（入力ファイルと同じ場所に保存）" readonly>
+            <button class="btn-ghost-line" id="pickOutputBtn">変更</button>
+            <button class="btn-ghost-line" id="clearOutputBtn">クリア</button>
+          </div>
+        </label>
+      </div>
+    </section>
+
+    <!-- ===== Action / Progress ===== -->
+    <section class="panel" id="panel-action">
+      <div class="action-opts">
+        <label class="opt opt-preview" title="OFFにすると、プレビューを挟まず直接保存します">
+          <input type="checkbox" id="optPreview" checked>
+          <span class="opt-label">処理前にプレビュー表示</span>
+          <span class="opt-hint">ルビの確認・編集が可能</span>
+        </label>
+        <label class="opt opt-preview" title="処理前に未知語を検出してまとめて辞書登録できます">
+          <input type="checkbox" id="optScanUnknown" checked>
+          <span class="opt-label">未知語スキャン</span>
+          <span class="opt-hint">読めない漢字を先に登録</span>
+        </label>
+      </div>
+
+      <div class="action-row">
+        <button class="btn-primary btn-large" id="processBtn" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <span class="btn-label">ルビを振って保存</span>
+        </button>
+        <div class="action-info" id="actionInfo">
+          <span id="queueSummary">ファイルが選択されていません</span>
+        </div>
+      </div>
+
+      <div class="progress hidden" id="progress">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-text" id="progressText">準備中…</div>
+      </div>
+    </section>
+
+    <!-- ===== Results ===== -->
+    <section class="panel hidden" id="panel-results">
+      <div class="panel-head">
+        <span class="panel-num">3</span>
+        <h2>処理結果</h2>
+      </div>
+      <div class="result-list" id="resultList"></div>
+      <div class="result-actions">
+        <button class="btn-secondary" id="newBatchBtn">新しい処理を開始</button>
+      </div>
+    </section>
+
+    </div><!-- /tab-panel process -->
+
+    <!-- ===== TAB: History ===== -->
+    <div class="tab-panel" data-panel="history">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>処理履歴</h2>
+          <div class="panel-head-actions">
+            <button class="btn-ghost-line" id="histClearBtn">履歴をすべて削除</button>
+          </div>
+        </div>
+        <p class="panel-desc">過去に処理したファイルが新しい順に表示されます。「再処理」で同じファイルに再度ルビを振り直したり、出力フォルダを直接開くことができます。</p>
+
+        <div class="history-list" id="histList">
+          <div class="empty-state">まだ履歴はありません</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ===== TAB: Exclusions ===== -->
+    <div class="tab-panel" data-panel="exclusions">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>除外リスト</h2>
+          <div class="panel-head-actions">
+            <button class="btn-ghost-line" id="exImportBtn">インポート</button>
+            <button class="btn-ghost-line" id="exExportJsonBtn">JSON</button>
+            <button class="btn-ghost-line" id="exExportCsvBtn">CSV</button>
+          </div>
+        </div>
+        <p class="panel-desc">登録した単語にはルビを振りません。漢字単体（例「山」）も熟語（例「富士山」「田中」）も登録できます。<strong>長い単語が優先</strong>されます。</p>
+
+        <div class="add-row-multi">
+          <textarea id="exInput" placeholder="除外したい単語を入力
+1行に1単語、または カンマ・スペース区切り
+例：田中
+　　富士山" rows="3"></textarea>
+          <button class="btn-primary btn-sm" id="exAddBtn">追加</button>
+        </div>
+
+        <div class="chip-list" id="exList">
+          <div class="empty-state">登録された単語はまだありません</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ===== TAB: Custom Dict ===== -->
+    <div class="tab-panel" data-panel="customdict">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>カスタム辞書</h2>
+          <div class="panel-head-actions">
+            <button class="btn-ghost-line" id="cdImportBtn">インポート</button>
+            <button class="btn-ghost-line" id="cdExportJsonBtn">JSON</button>
+            <button class="btn-ghost-line" id="cdExportCsvBtn">CSV</button>
+          </div>
+        </div>
+        <p class="panel-desc">登録した単語は、形態素解析の結果より優先して指定の読みが使われます。人名・地名・専門用語などを正確にルビ付けできます。</p>
+
+        <div class="cd-add">
+          <div class="cd-add-row">
+            <input type="text" id="cdWordInput" placeholder="単語(漢字)" class="cd-word">
+            <input type="text" id="cdReadingInput" placeholder="読み(ひらがな)" class="cd-reading">
+            <select id="cdCategoryInput" class="cd-category">
+              <option value="人名">人名</option>
+              <option value="地名">地名</option>
+              <option value="専門用語">専門用語</option>
+              <option value="固有名詞">固有名詞</option>
+              <option value="その他">その他</option>
+            </select>
+            <button class="btn-primary btn-sm" id="cdAddBtn">追加</button>
+          </div>
+        </div>
+
+        <div class="cd-filter-row">
+          <input type="text" id="cdSearch" placeholder="検索…" class="cd-search">
+          <div class="cd-filter-tabs" id="cdFilterTabs">
+            <button class="cd-filter active" data-cat="all">すべて</button>
+            <button class="cd-filter" data-cat="人名">人名</button>
+            <button class="cd-filter" data-cat="地名">地名</button>
+            <button class="cd-filter" data-cat="専門用語">専門用語</button>
+            <button class="cd-filter" data-cat="固有名詞">固有名詞</button>
+            <button class="cd-filter" data-cat="その他">その他</button>
+          </div>
+        </div>
+
+        <div class="cd-list" id="cdList">
+          <div class="empty-state">登録された単語はまだありません</div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="footer">
+      <span>完全オフライン動作 · <span id="appVersion"></span></span>
+      <span class="footer-sep">·</span>
+      <a href="#" id="showSettingsLocation">設定ファイルの場所</a>
+    </footer>
+  </div>
+
+  <!-- ===== Preview Modal ===== -->
+  <div class="modal-backdrop hidden" id="previewModal">
+    <div class="modal">
+      <header class="modal-head">
+        <div class="modal-title">
+          <h2 id="previewTitle">プレビュー</h2>
+          <span class="modal-subtitle" id="previewSubtitle"></span>
+        </div>
+        <button class="modal-close" id="previewClose" title="閉じる">×</button>
+      </header>
+
+      <div class="preview-toolbar">
+        <div class="preview-toolbar-left">
+          <div class="stats" id="previewStats"></div>
+        </div>
+        <div class="view-toggle">
+          <button class="toggle-btn active" data-view="rubied">ルビ付き</button>
+          <button class="toggle-btn" data-view="original">元の文書</button>
+        </div>
+      </div>
+
+      <div class="edit-mode-bar" id="editModeBar">
+        <div class="edit-mode-tabs">
+          <button class="edit-mode-btn active" data-mode="delete">削除</button>
+          <button class="edit-mode-btn" data-mode="edit">編集</button>
+          <button class="edit-mode-btn" data-mode="add">追加</button>
+        </div>
+        <div class="edit-mode-hint" id="editModeHint">ルビをクリックで削除マーク(Shiftで範囲選択)</div>
+      </div>
+
+      <div class="preview-selection-bar hidden" id="selectionBar">
+        <span><span class="sel-count" id="selCount">0</span> 個のルビを選択中</span>
+        <div class="modal-foot-actions">
+          <button class="btn-ghost-line" id="selAllBtn">すべて選択</button>
+          <button class="btn-ghost-line" id="selClearBtn">選択解除</button>
+          <button class="btn-primary btn-sm" id="selDeleteBtn">選択したルビを削除</button>
+        </div>
+      </div>
+
+      <div class="preview-frame">
+        <div class="preview editable" id="previewContent">
+          <div class="preview-empty">(本文なし)</div>
+        </div>
+      </div>
+
+      <!-- Ruby edit popup (positioned absolutely over the preview) -->
+      <div class="ruby-popup hidden" id="rubyPopup">
+        <div class="rp-head">
+          <span class="rp-title" id="rubyPopupTitle">ルビを編集</span>
+          <button class="rp-close" id="rubyPopupClose" title="閉じる">×</button>
+        </div>
+        <div class="rp-body">
+          <div class="rp-field">
+            <label>対象</label>
+            <div class="rp-target" id="rubyPopupTarget"></div>
+          </div>
+          <div class="rp-field">
+            <label>よみ</label>
+            <input type="text" id="rubyPopupReading" placeholder="ひらがな または カタカナ" autocomplete="off">
+          </div>
+        </div>
+        <div class="rp-actions">
+          <button class="btn-ghost-line" id="rubyPopupCancel">キャンセル</button>
+          <button class="btn-ghost-line rp-remove hidden" id="rubyPopupRemove">このルビを削除</button>
+          <button class="btn-primary btn-sm" id="rubyPopupApply">適用</button>
+        </div>
+      </div>
+
+      <footer class="modal-foot">
+        <div class="modal-foot-info" id="previewPagination"></div>
+        <div class="modal-foot-actions">
+          <button class="btn-secondary" id="previewCancelBtn">キャンセル</button>
+          <button class="btn-primary" id="previewSaveBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span id="previewSaveLabel">この内容で保存</span>
+          </button>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ===== Unknown Word Scan Modal ===== -->
+  <div class="modal-backdrop hidden" id="unknownModal">
+    <div class="modal modal-md">
+      <header class="modal-head">
+        <div class="modal-title">
+          <h2 id="unknownTitle">未知語スキャン</h2>
+          <span class="modal-subtitle" id="unknownSubtitle"></span>
+        </div>
+        <button class="modal-close" id="unknownClose" title="閉じる">×</button>
+      </header>
+
+      <div class="unknown-toolbar">
+        <div class="stats" id="unknownStats"></div>
+        <div class="unknown-actions-top">
+          <button class="btn-ghost-line btn-sm" id="unknownSelectAll">すべて選択</button>
+          <button class="btn-ghost-line btn-sm" id="unknownSelectNone">選択解除</button>
+        </div>
+      </div>
+
+      <!-- カテゴリタブ -->
+      <div class="unknown-cat-tabs" id="unknownCatTabs">
+        <button class="unknown-cat active" data-cat="all">
+          すべて <span class="cat-count" data-count="all">0</span>
+        </button>
+        <button class="unknown-cat" data-cat="人名">
+          人名 <span class="cat-count" data-count="人名">0</span>
+        </button>
+        <button class="unknown-cat" data-cat="専門用語">
+          専門用語 <span class="cat-count" data-count="専門用語">0</span>
+        </button>
+        <button class="unknown-cat" data-cat="その他">
+          その他 <span class="cat-count" data-count="その他">0</span>
+        </button>
+      </div>
+
+      <!-- 未知語テーブル -->
+      <div class="unknown-frame">
+        <div class="unknown-list" id="unknownList">
+          <div class="preview-empty">スキャン中…</div>
+        </div>
+      </div>
+
+      <div class="unknown-hint">
+        💡 推定読みは漢字単体の音訓から推測した候補です。必ずしも正しいとは限りません。<br>
+        登録した読みはカスタム辞書に保存され、以降の処理で自動的に使われます。
+      </div>
+
+      <footer class="modal-foot">
+        <div class="modal-foot-info" id="unknownPagination">
+          <span id="unknownSelCount">0</span> 件選択中
+        </div>
+        <div class="modal-foot-actions">
+          <button class="btn-secondary" id="unknownSkipAll">すべてスキップ</button>
+          <button class="btn-primary" id="unknownApply">
+            <span id="unknownApplyLabel">選択を辞書に登録して続行</span>
+          </button>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Vendor libraries -->
+  <script src="vendor/jszip.min.js"></script>
+  <script src="vendor/kuromoji.js"></script>
+
+  <!-- PWA Electron API shim (must load before app modules) -->
+  <script src="js/electron-api-shim.js"></script>
+
+  <!-- App modules -->
+  <script src="js/theme.js"></script>
+  <script src="js/ruby-engine.js"></script>
+  <script src="js/docx-processor.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/history.js"></script>
+  <script src="js/kanji-readings.js"></script>
+  <script src="js/unknown-scanner.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => {
+            console.log('[PWA] Service Worker registered:', reg.scope);
+            // アップデート検知
+            reg.addEventListener('updatefound', () => {
+              const worker = reg.installing;
+              worker && worker.addEventListener('statechange', () => {
+                if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+                  console.log('[PWA] New version available, will update on next launch');
+                }
+              });
+            });
+          })
+          .catch(err => console.warn('[PWA] SW registration failed:', err));
+      });
+    }
+
+    // PWAインストール可能な状態になったときのハンドラ
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      // インストールボタンを表示する処理（後から UI 側で使える）
+      const installBtn = document.getElementById('pwaInstallBtn');
+      if (installBtn) {
+        installBtn.classList.remove('hidden');
+        installBtn.addEventListener('click', async () => {
+          if (!deferredPrompt) return;
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          console.log('[PWA] Install prompt:', outcome);
+          deferredPrompt = null;
+          installBtn.classList.add('hidden');
+        });
+      }
+    });
+  </script>
+</body>
+</html>
